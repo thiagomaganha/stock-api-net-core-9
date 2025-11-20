@@ -40,7 +40,7 @@ namespace api.Controllers
 
                 var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
-                if (result.Succeeded)
+                if (!result.Succeeded)
                     return Unauthorized("Username not found and/or password incorrect");
 
                 return Ok(new NewUserDto
