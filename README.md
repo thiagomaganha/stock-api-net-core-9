@@ -1,7 +1,7 @@
 # Stock Market Web API
 
 ## Overview
-This project is a **.NET 7 Web API** designed for managing stocks, portfolios, and comments. It includes **JWT-based authentication**, **ASP.NET Identity** for user management, and **Swagger/OpenAPI** for API documentation.
+This project is a **.NET Core 9 Web API** designed for managing stocks, portfolios, and comments. It includes **JWT-based authentication**, **ASP.NET Identity** for user management, and **Swagger/OpenAPI** for API documentation.
 
 ## Features
 - CRUD operations for Stocks, Portfolios, and Comments
@@ -11,7 +11,7 @@ This project is a **.NET 7 Web API** designed for managing stocks, portfolios, a
 - Entity Framework Core with SQL Server
 
 ## Technologies Used
-- .NET 7
+- .NET Core 9
 - ASP.NET Core Web API
 - Entity Framework Core
 - SQL Server
@@ -28,8 +28,8 @@ This project is a **.NET 7 Web API** designed for managing stocks, portfolios, a
 ## Setup Instructions
 1. **Clone the repository**:
    ```bash
-   git clone <your-repo-url>
-   cd <your-project-folder>
+   git clone https://github.com/thiagomaganha/stock-api-net-core-9.git
+   cd stock-api-net-core-9
    ```
 
 2. **Update the connection string** in `appsettings.json`:
@@ -144,6 +144,7 @@ Response:
   }
 ]
 ```
+
 
 ### 4. Add a Comment to a Stock
 **POST** `/api/comments`
