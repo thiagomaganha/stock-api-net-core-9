@@ -77,6 +77,25 @@ namespace api.Controllers
             
             return Created("portfolio", result);
         }
-    
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> DeletePortfolio(string symbol)
+        {
+            var username = User.GetUserName();
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+                return Unauthorized();
+
+            var userPortfolio = await _portfolioService.GetUserPortfolio(user);
+            if (!userPortfolio.Any(x => x.Symbol == symbol))
+                return BadRequest("Stock does not exist in portfolio");
+
+            var result = await _portfolioService.DeleteAsync(user, symbol);
+            if (result == null)
+                return StatusCode(500, "Failed to delete stock from portfolio");
+
+            return NoContent();
+        }
     }
 }

@@ -4,9 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos;
 using api.Interfaces;
+using api.Extensions;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using api.Models;
 
 namespace api.Controllers
 {
@@ -17,11 +20,14 @@ namespace api.Controllers
     {
         private readonly ICommentService _commentService;
         private readonly IStockService _stockService;
+        private readonly UserManager<AppUser> _userManager; 
 
-        public CommentController(ICommentService commentService, IStockService stockService)
+
+        public CommentController(ICommentService commentService, IStockService stockService, UserManager<AppUser> userManager)
         {
             _commentService = commentService;
             _stockService = stockService;
+            _userManager = userManager;
         }
 
 
@@ -46,6 +52,7 @@ namespace api.Controllers
 
 
         [HttpPost("{stockId:int}")]
+        [Authorize]
         public async Task<ActionResult<CommentDto>> Create(int stockId, [FromBody] CreateCommentRequestDto comment)
         {
             if (!ModelState.IsValid)
@@ -55,10 +62,17 @@ namespace api.Controllers
             if (!exists)
                 return BadRequest("Stock does not exist");
 
-            var commentModel = comment.ToCommentFromRequestDto(stockId);
-            await _commentService.CreateAsync(commentModel);
-            return CreatedAtAction(nameof(Get), new { id = commentModel.Id }, commentModel.ToCommentDto());
+            var username = User.GetUserName();
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+                return Unauthorized();
 
+            var commentModel = comment.ToCommentFromRequestDto(stockId);
+            commentModel.AppUserId = user.Id;
+
+            await _commentService.CreateAsync(commentModel);
+            
+            return CreatedAtAction(nameof(Get), new { id = commentModel.Id }, commentModel.ToCommentDto());
         }
 
         [HttpPut("{id:int}")]

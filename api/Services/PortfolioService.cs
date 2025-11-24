@@ -20,6 +20,11 @@ namespace api.Services
             return await _portfolioRepository.AddAsync(portfolio);
         }
 
+        public async Task<Portfolio> DeleteAsync(AppUser user, string symbol)
+        {
+            return await _portfolioRepository.DeleteAsync(user, symbol);
+        }
+
         public async Task<List<Stock>> GetUserPortfolio(AppUser user)
         {
             return await _portfolioRepository.GetUserPortfolio(user);
