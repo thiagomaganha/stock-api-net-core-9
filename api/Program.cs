@@ -91,6 +91,9 @@ builder.Services.AddScoped<IStockRepository, StockRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<IStockService, StockService>();
+builder.Services.AddScoped<IPortfolioService, PortfolioService>();
 
 var app = builder.Build();
 

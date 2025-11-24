@@ -55,13 +55,12 @@ namespace api.Repositories
         public async Task<Comment?> UpdateAsync(int id, Comment comment)
         {
             var commentModel = await _context.Comments.FindAsync(id);
-            if (comment == null)
+            if (commentModel == null)
                 return null;
 
             commentModel.Title = comment.Title;
             commentModel.Content = comment.Content; 
             
-            _context.Comments.Update(comment);
             await _context.SaveChangesAsync();
             
             return commentModel;

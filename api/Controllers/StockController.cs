@@ -13,10 +13,10 @@ namespace api.Controllers
     [Authorize]
     public class StockController : ControllerBase
     {
-        private readonly IStockRepository _repo;
-        public StockController(IStockRepository repo)
+        private readonly IStockService _service;
+        public StockController(IStockService service)
         {
-            _repo = repo;
+            _service = service;
         }
         [HttpGet]
         public async Task<ActionResult<List<StockDto>>> Get([FromQuery] QueryObject query)
@@ -24,7 +24,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
                 
-            var stocks = await _repo.GetAllAsync(query);
+            var stocks = await _service.GetAllAsync(query);
             var stockDto = stocks.Select(s => s.ToStockDto());
 
             return Ok(stocks);
@@ -37,7 +37,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var stock = await _repo.GetAsync(id);
+            var stock = await _service.GetAsync(id);
             if (stock == null)
             {
                 return NotFound();
@@ -52,7 +52,7 @@ namespace api.Controllers
                 return BadRequest(ModelState);
 
             var stockModel = stock.ToStockFromRequestDto();
-            await _repo.CreateAsync(stockModel);
+            await _service.CreateAsync(stockModel);
             return CreatedAtAction(nameof(Get), new { id = stockModel.Id }, stockModel.ToStockDto());
         }
 
@@ -63,7 +63,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var stockModel = await _repo.UpdateAsync(id, stock.ToStockFromRequestDto());
+            var stockModel = await _service.UpdateAsync(id, stock.ToStockFromRequestDto());
             if (stockModel == null)
                 return NotFound();
 
@@ -77,7 +77,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             
-            var stock = await _repo.DeleteAsync(id);
+            var stock = await _service.DeleteAsync(id);
             
             if (stock == null)
                 return NotFound();

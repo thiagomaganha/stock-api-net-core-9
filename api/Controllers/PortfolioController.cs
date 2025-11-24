@@ -16,17 +16,16 @@ namespace api.Controllers
     public class PortfolioController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly IPortfolioRepository _portfolioRepository;
-
-        private readonly IStockRepository _stockRepository;
+        private readonly IPortfolioService _portfolioService;
+        private readonly IStockService _stockService;
 
         public PortfolioController(UserManager<AppUser> userManager, 
-                                    IPortfolioRepository portfolioRepository, 
-                                    IStockRepository stockRepository)
+                                    IPortfolioService portfolioService, 
+                                    IStockService stockService)
         {
             _userManager = userManager;
-            _portfolioRepository = portfolioRepository;
-            _stockRepository = stockRepository;
+            _portfolioService = portfolioService;
+            _stockService = stockService;
         }
     
         [HttpGet]
@@ -39,7 +38,7 @@ namespace api.Controllers
             if (user == null)
                 return Unauthorized();
 
-            var userPortfolio = await _portfolioRepository.GetUserPortfolio(user);
+            var userPortfolio = await _portfolioService.GetUserPortfolio(user);
 
             if (userPortfolio == null)
                 return NotFound();
@@ -57,11 +56,11 @@ namespace api.Controllers
             if (user == null)
                 return Unauthorized();
             
-            var stock = await _stockRepository.GetBySymbolAsync(symbol);
+            var stock = await _stockService.GetBySymbolAsync(symbol);
             if (stock == null)
                 return BadRequest("Stock does not exist");
 
-            var userPortfolio = await _portfolioRepository.GetUserPortfolio(user);
+            var userPortfolio = await _portfolioService.GetUserPortfolio(user);
             if (userPortfolio.Any(x => x.Symbol == symbol))
                 return BadRequest("Stock already in portfolio");    
 
@@ -71,9 +70,12 @@ namespace api.Controllers
                 StockId = stock.Id
             };
             
-            await _portfolioRepository.AddAsync(portfolio);
+            var result = await _portfolioService.AddAsync(portfolio);
+
+            if(result == null)  
+            return StatusCode(500, "Failed to add stock to portfolio");
             
-            return Ok();
+            return Created("portfolio", result);
         }
     
     }
