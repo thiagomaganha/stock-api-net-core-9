@@ -1,4 +1,3 @@
-
 using Xunit;
 using Moq;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +29,7 @@ private readonly Mock<IStockService> _serviceMock;
     [Fact]
     public async Task Get_ShouldReturnOk_WithStockList()
     {
-        // Arrange
+        
         var stocks = new List<Stock>
         {
             new Stock { Id = 1, Symbol = "TSLA", CompanyName = "Tesla" },
@@ -40,10 +39,10 @@ private readonly Mock<IStockService> _serviceMock;
         _serviceMock.Setup(s => s.GetAllAsync(It.IsAny<QueryObject>()))
             .ReturnsAsync(stocks.ToList());
 
-        // Act
+        
         var result = await _controller.Get(new QueryObject());
 
-        // Assert
+        
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
         var returnedStocks = Assert.IsType<List<Stock>>(okResult.Value);
         Assert.Equal(2, returnedStocks.Count);
@@ -72,7 +71,6 @@ private readonly Mock<IStockService> _serviceMock;
         Assert.IsType<NotFoundResult>(result.Result);
     }
 
-    // ✅ Test Create
     [Fact]
     public async Task Create_ShouldReturnCreatedAtAction()
     {

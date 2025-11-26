@@ -1,6 +1,8 @@
 .vscode/settings.json
 
-api/bin
-api/obj
-api/Properties
+src/api/bin
+src/api/obj
+
+src/api/Properties
 database.sql
+
