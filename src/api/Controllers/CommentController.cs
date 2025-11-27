@@ -52,7 +52,6 @@ namespace api.Controllers
 
 
         [HttpPost("{stockId:int}")]
-        [Authorize]
         public async Task<ActionResult<CommentDto>> Create(int stockId, [FromBody] CreateCommentRequestDto comment)
         {
             if (!ModelState.IsValid)

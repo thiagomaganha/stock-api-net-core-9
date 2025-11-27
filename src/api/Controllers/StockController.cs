@@ -10,6 +10,7 @@ namespace api.Controllers
 {
     [ApiController]
     [Route("api/stock")]
+    [Authorize]
     public class StockController : ControllerBase
     {
         private readonly IStockService _service;
@@ -31,11 +32,10 @@ namespace api.Controllers
             var stocks = await _service.GetAllAsync(query);
             var stockDto = stocks.Select(s => s.ToStockDto()).ToList();
 
-            return Ok(stocks);
+            return Ok(stockDto);
         }
 
         [HttpGet]
-        [Authorize]
         [Route("{id:int}")]
         public async Task<ActionResult<StockDto>> Get([FromRoute] int id)
         {
@@ -51,7 +51,6 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<ActionResult<StockDto>> Create([FromBody] CreateStockRequestDto stock)
         {
             if (!ModelState.IsValid)
@@ -98,7 +97,6 @@ namespace api.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
-        [Authorize]
         public async Task<ActionResult<StockDto>> Update([FromRoute] int id, [FromBody] UpdateStockRequestDto stock)
         {
             if (!ModelState.IsValid)
@@ -113,7 +111,6 @@ namespace api.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
-        [Authorize]
         public async Task<ActionResult<string>> Delete([FromRoute] int id)
         {
             if (!ModelState.IsValid)
