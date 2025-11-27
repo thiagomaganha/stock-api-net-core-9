@@ -6,6 +6,5 @@ src/api/obj
 src/api/Properties
 database.sql
 
-tests/api.Tests/obj/Debug/net9.0/api.Tests.AssemblyInfo.cs
-tests/api.Tests/obj/Debug/net9.0/api.Tests.AssemblyInfoInputs.cache
-tests/api.Tests/obj/Debug/net9.0/api.Tests.csproj.AssemblyReference.cache
+tests/api.Tests/obj
+tests/api.Tests/bin
